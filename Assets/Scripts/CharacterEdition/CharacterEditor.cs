@@ -7,6 +7,18 @@ using UnityEngine.InputSystem;
 
 public class CharacterEditor : MonoBehaviour
 {
+	private class CharacterConfig
+	{
+		public int index = 0;
+		public List<int> values = null;
+
+		public CharacterConfig(int index)
+		{
+			this.index = index;
+			values = new List<int>();
+		}
+	}
+
 	[Header("External references")]
 	[SerializeField] private PlayerAreaTrigger trigger = null;
 	[SerializeField] private CinemachineVirtualCamera vCamera = null;
@@ -15,9 +27,13 @@ public class CharacterEditor : MonoBehaviour
 	[Header("Internal references")]
 	[SerializeField] private GameObject editPanel = null;
 	[SerializeField] private List<CharacterField> fields = null;
+	[SerializeField] private GameObject loadPanel = null;
 
 	private Player player = null;
 	private bool editMode = false;
+
+	private CharacterConfig currentConfig = null;
+	private int lastIndex = 0;
 
 	private void OnEnable()
 	{
@@ -30,10 +46,6 @@ public class CharacterEditor : MonoBehaviour
 		if (player != null && Keyboard.current.eKey.wasPressedThisFrame)
 		{
 			ShowEditMode();
-		}
-		else if (player != null && Keyboard.current.fKey.wasPressedThisFrame)
-		{
-			HideEditMode();
 		}
 	}
 
@@ -88,5 +100,34 @@ public class CharacterEditor : MonoBehaviour
 
 			editPanel.SetActive(false);
 		}
+	}
+
+	public void ShowHideLoadPanel()
+	{
+		loadPanel.SetActive(!loadPanel.activeSelf);
+	}
+
+	public void LoadConfig(int index)
+	{
+		Debug.Log("Loading config : " + index);
+	}
+
+	public void SaveConfig(bool saveAsNew)
+	{
+		if (saveAsNew || (!saveAsNew && currentConfig == null))
+		{
+			currentConfig = new CharacterConfig(lastIndex);
+			lastIndex++;
+		}
+
+		for (int i = 0; i < fields.Count; i++)
+		{
+			currentConfig.values.Add(fields[i].GetValueIndex());
+		}
+
+		string json = JsonUtility.ToJson(currentConfig);
+		Debug.Log(json);
+
+		HideEditMode();
 	}
 }

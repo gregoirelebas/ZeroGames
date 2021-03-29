@@ -89,4 +89,9 @@ public class CharacterField : MonoBehaviour
 			SetValueToTarget();
 		}
 	}
+
+	public int GetValueIndex()
+	{
+		return valueIndex;
+	}
 }
