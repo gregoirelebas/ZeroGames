@@ -169,7 +169,7 @@ public class CharacterEditor : MonoBehaviour
 			path = Path.Combine(path, filePath);
 			if (File.Exists(path))
 			{
-				string json = File.ReadAllText(path);				
+				string json = File.ReadAllText(path);
 				allConfigs = JsonConvert.DeserializeObject<List<CharacterConfig>>(json);
 			}
 		}
@@ -215,9 +215,9 @@ public class CharacterEditor : MonoBehaviour
 	/// <summary>
 	/// Save the current configuration. Can be saved as new or overwrite an existing one.
 	/// </summary>
-	public void SaveConfig(bool saveAsNew)
+	public void SaveConfig(bool save)
 	{
-		if (saveAsNew || (!saveAsNew && currentConfig == null))
+		if (save || currentConfig == null)
 		{
 			currentConfig = new CharacterConfig(allConfigs.Count);
 		}
@@ -227,13 +227,18 @@ public class CharacterEditor : MonoBehaviour
 			currentConfig.values.Add(fields[i].GetValueIndex());
 		}
 
-		if (currentConfig.index < allConfigs.Count)
+		if (save)
 		{
-			allConfigs[currentConfig.index] = currentConfig;
-		}
-		else
-		{
-			allConfigs.Add(currentConfig);
+			//Already existing => overwrite
+			if (currentConfig.index < allConfigs.Count)
+			{
+				allConfigs[currentConfig.index] = currentConfig;
+			}
+			//Not existing yet, create a new one.
+			else
+			{
+				allConfigs.Add(currentConfig);
+			}
 		}
 
 		HideEditMode();
