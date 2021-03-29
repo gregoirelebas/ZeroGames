@@ -13,8 +13,6 @@ public class PlayerAreaTrigger : MonoBehaviour
 		{
 			Player player = other.GetComponent<Player>();
 
-			Debug.Log("Entered!");
-
 			OnPlayerEnter?.Invoke(player);
 		}
 	}

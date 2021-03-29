@@ -4,6 +4,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
+public enum PlayerParts
+{
+	Hair,
+	Body,
+	LeftArm,
+	RightArm,
+	Count //KEEP AT END
+}
+
 public class Player : MonoBehaviour
 {
 	private NavMeshAgent agent = null;
@@ -45,5 +54,10 @@ public class Player : MonoBehaviour
 	public void SetMove(bool canMove)
 	{
 		agent.isStopped = !canMove;
+	}
+
+	public GameObject GetPart(PlayerParts part)
+	{
+		return null;
 	}
 }
