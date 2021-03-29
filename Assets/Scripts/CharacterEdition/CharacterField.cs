@@ -94,7 +94,7 @@ public class CharacterField : MonoBehaviour
 
 	public void SetIndexValue(int value)
 	{
-		if (value > 0 && value < maxValue)
+		if (value >= 0 && value < maxValue)
 		{
 			valueIndex = value;
 			SetValueToTarget();

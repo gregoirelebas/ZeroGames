@@ -33,8 +33,8 @@ public class CharacterEditor : MonoBehaviour
 	private Player player = null;
 	private bool editMode = false;
 
+	private List<CharacterConfig> allConfigs = new List<CharacterConfig>();
 	private CharacterConfig currentConfig = null;
-	private int lastIndex = 0;
 	private List<LoadSlot> loadSlots = new List<LoadSlot>();
 
 	private void Awake()
@@ -42,6 +42,15 @@ public class CharacterEditor : MonoBehaviour
 		for (int i = 0; i < slotGrid.transform.childCount; i++)
 		{
 			loadSlots.Add(slotGrid.transform.GetChild(i).GetComponent<LoadSlot>());
+		}
+	}
+
+	private void Start()
+	{
+		int lastIndex = PlayerPrefs.GetInt("LastCharacterIndex", -1);
+		if (lastIndex > -1)
+		{
+			LoadConfig(lastIndex);
 		}
 	}
 
@@ -63,6 +72,14 @@ public class CharacterEditor : MonoBehaviour
 	{
 		trigger.OnPlayerEnter -= GetPlayer;
 		trigger.OnPlayerExit -= RemovePlayer;
+	}
+
+	private void OnDestroy()
+	{
+		if (currentConfig != null)
+		{
+			PlayerPrefs.SetInt("LastCharacterIndex", currentConfig.index);
+		}
 	}
 
 	private void GetPlayer(Player player)
@@ -122,7 +139,7 @@ public class CharacterEditor : MonoBehaviour
 				loadSlots[i].gameObject.SetActive(false);
 			}
 
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < allConfigs.Count; i++)
 			{
 				loadSlots[i].gameObject.SetActive(true);
 				loadSlots[i].SetSlotIndex(this, i);
@@ -132,13 +149,14 @@ public class CharacterEditor : MonoBehaviour
 
 	public void LoadConfig(int index)
 	{
-		Debug.Log("Loading config : " + index);
-
-		currentConfig = new CharacterConfig(index);
-
-		for (int i = 0; i < fields.Count; i++)
+		if (index >= 0 && index < allConfigs.Count)
 		{
-			fields[i].SetIndexValue(index + 1);
+			currentConfig = allConfigs[index];
+
+			for (int i = 0; i < fields.Count; i++)
+			{
+				fields[i].SetIndexValue(currentConfig.values[i]);
+			}
 		}
 	}
 
@@ -146,8 +164,7 @@ public class CharacterEditor : MonoBehaviour
 	{
 		if (saveAsNew || (!saveAsNew && currentConfig == null))
 		{
-			currentConfig = new CharacterConfig(lastIndex);
-			lastIndex++;
+			currentConfig = new CharacterConfig(allConfigs.Count);
 		}
 
 		for (int i = 0; i < fields.Count; i++)
@@ -155,8 +172,14 @@ public class CharacterEditor : MonoBehaviour
 			currentConfig.values.Add(fields[i].GetValueIndex());
 		}
 
-		string json = JsonUtility.ToJson(currentConfig);
-		Debug.Log(json);
+		if (currentConfig.index < allConfigs.Count)
+		{
+			allConfigs[currentConfig.index] = currentConfig;
+		}
+		else
+		{
+			allConfigs.Add(currentConfig);
+		}
 
 		HideEditMode();
 	}
