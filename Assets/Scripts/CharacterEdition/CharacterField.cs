@@ -67,7 +67,7 @@ public class CharacterField : MonoBehaviour
 			if (valueIndex < 0)
 			{
 				//If we are not setting mesh, we are setting material
-				valueIndex = setMesh ? meshes.Count : materials.Count;
+				valueIndex = (setMesh ? meshes.Count : materials.Count) - 1;
 			}
 
 			SetValueToTarget();
@@ -81,7 +81,7 @@ public class CharacterField : MonoBehaviour
 			valueIndex++;
 
 			//If we are not setting mesh, we are setting material
-			if (valueIndex > (setMesh ? meshes.Count : materials.Count))
+			if (valueIndex >= (setMesh ? meshes.Count : materials.Count))
 			{
 				valueIndex = 0;
 			}

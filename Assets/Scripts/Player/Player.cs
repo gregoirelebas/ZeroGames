@@ -15,6 +15,11 @@ public enum PlayerParts
 
 public class Player : MonoBehaviour
 {
+	[SerializeField] private GameObject hairMesh = null;
+	[SerializeField] private GameObject bodyMesh = null;
+	[SerializeField] private GameObject leftArmMesh = null;
+	[SerializeField] private GameObject rightArmMesh = null;
+
 	private NavMeshAgent agent = null;
 	private Camera mainCamera = null;
 
@@ -58,6 +63,23 @@ public class Player : MonoBehaviour
 
 	public GameObject GetPart(PlayerParts part)
 	{
-		return null;
+		switch (part)
+		{
+			case PlayerParts.Hair:
+				return hairMesh;
+
+			case PlayerParts.Body:
+				return bodyMesh;
+
+			case PlayerParts.LeftArm:
+				return leftArmMesh;
+
+			case PlayerParts.RightArm:
+				return rightArmMesh;
+
+			default:
+				Debug.LogWarning("Unknown player body part : " + part.ToString() + ", return null!");
+				return null;
+		}
 	}
 }
