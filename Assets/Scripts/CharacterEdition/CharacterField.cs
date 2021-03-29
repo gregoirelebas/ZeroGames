@@ -19,6 +19,7 @@ public class CharacterField : MonoBehaviour
 	private GameObject target = null;
 	private MeshFilter meshFilter = null;
 	private MeshRenderer meshRenderer = null;
+
 	private int valueIndex = 0;
 	private int maxValue = 0;
 
@@ -30,6 +31,9 @@ public class CharacterField : MonoBehaviour
 		maxValue = setMesh ? meshes.Count : materials.Count;
 	}
 
+	/// <summary>
+	/// Updated mesh and/or material based on current index.
+	/// </summary>
 	private void SetValueToTarget()
 	{
 		if (setMesh)
@@ -43,11 +47,25 @@ public class CharacterField : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Return the player part assigned to this slot.
+	/// </summary>
 	public PlayerParts GetPart()
 	{
 		return part;
 	}
 
+	/// <summary>
+	/// Return the current value index.
+	/// </summary>
+	public int GetValueIndex()
+	{
+		return valueIndex;
+	}
+
+	/// <summary>
+	/// Set the target to edit and try to get MeshRenderer and MeshFilter.
+	/// </summary>
 	public void SetTarget(GameObject target)
 	{
 		this.target = target;
@@ -63,6 +81,9 @@ public class CharacterField : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Decrease value index by 1 and apply modifications.
+	/// </summary>
 	public void SetPreviousValue()
 	{
 		if (target != null)
@@ -77,6 +98,9 @@ public class CharacterField : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Increase value index by 1 and apply modifications.
+	/// </summary>
 	public void SetNextValue()
 	{
 		if (target != null)
@@ -92,6 +116,9 @@ public class CharacterField : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Set the value index and apply modifications.
+	/// </summary>
 	public void SetIndexValue(int value)
 	{
 		if (value >= 0 && value < maxValue)
@@ -99,10 +126,5 @@ public class CharacterField : MonoBehaviour
 			valueIndex = value;
 			SetValueToTarget();
 		}
-	}
-
-	public int GetValueIndex()
-	{
-		return valueIndex;
 	}
 }

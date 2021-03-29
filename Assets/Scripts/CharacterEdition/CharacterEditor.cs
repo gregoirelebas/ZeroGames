@@ -23,14 +23,16 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
-	[Header("External references")]
+	[Header("Player interaction")]
 	[SerializeField] private PlayerAreaTrigger trigger = null;
 	[SerializeField] private CinemachineVirtualCamera vCamera = null;
 	[SerializeField] private TextMeshProUGUI interactText = null;
 
-	[Header("Internal references")]
+	[Header("Edition")]
 	[SerializeField] private GameObject editPanel = null;
 	[SerializeField] private List<CharacterField> fields = null;
+
+	[Header("Loading")]
 	[SerializeField] private GridLayoutGroup slotGrid = null;
 
 	private Player player = null;
@@ -38,6 +40,7 @@ public class CharacterEditor : MonoBehaviour
 
 	private List<CharacterConfig> allConfigs = new List<CharacterConfig>();
 	private CharacterConfig currentConfig = null;
+
 	private List<LoadSlot> loadSlots = new List<LoadSlot>();
 
 	private string directoryPath = "Character";
@@ -78,6 +81,9 @@ public class CharacterEditor : MonoBehaviour
 		WriteCharacterFile();
 	}
 
+	/// <summary>
+	/// Get the player to edit and set slot fields.
+	/// </summary>
 	private void GetPlayer(Player player)
 	{
 		this.player = player;
@@ -93,12 +99,18 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Clear the player reference.
+	/// </summary>
 	private void RemovePlayer()
 	{
 		player = null;
 		interactText.text = "";
 	}
 
+	/// <summary>
+	/// Show the edition panel and enable the edition camera.
+	/// </summary>
 	private void ShowEditMode()
 	{
 		if (!editMode)
@@ -112,6 +124,9 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Hide the edition panel and disable the edition camera.
+	/// </summary>
 	private void HideEditMode()
 	{
 		if (editMode)
@@ -125,6 +140,9 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Write all configurations saved in a file.
+	/// </summary>
 	private void WriteCharacterFile()
 	{
 		string path = Path.Combine(Application.persistentDataPath, directoryPath);
@@ -140,6 +158,9 @@ public class CharacterEditor : MonoBehaviour
 		File.WriteAllText(path, json);
 	}
 
+	/// <summary>
+	/// Read the file and load all configurations saved.
+	/// </summary>
 	private void LoadCharacterFile()
 	{
 		string path = Path.Combine(Application.persistentDataPath, directoryPath);
@@ -154,6 +175,9 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Show or Hide the load panel and set load slots.
+	/// </summary>
 	public void ShowHideLoadPanel()
 	{
 		slotGrid.gameObject.SetActive(!slotGrid.gameObject.activeSelf);
@@ -172,6 +196,9 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Load the character configuration and apply it on player.
+	/// </summary>
 	public void LoadConfig(int index)
 	{
 		if (index >= 0 && index < allConfigs.Count)
@@ -185,6 +212,9 @@ public class CharacterEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Save the current configuration. Can be saved as new or overwrite an existing one.
+	/// </summary>
 	public void SaveConfig(bool saveAsNew)
 	{
 		if (saveAsNew || (!saveAsNew && currentConfig == null))

@@ -20,6 +20,9 @@ public class LoadSlot : MonoBehaviour
 		slotBtn.onClick.RemoveAllListeners();
 	}
 
+	/// <summary>
+	/// Add listener to load config with index.
+	/// </summary>
 	public void SetSlotIndex(CharacterEditor editor, int index)
 	{
 		slotBtn.onClick.AddListener(() => editor.LoadConfig(index));
