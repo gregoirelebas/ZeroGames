@@ -21,6 +21,7 @@ public class RecipeEditor : MonoBehaviour
 	[SerializeField] private Transform recipeGridContainer = null;
 
 	private Player player = null;
+	private bool editMode = false;
 
 	private List<IngredientSlot> ingredientSlots = new List<IngredientSlot>();
 
@@ -32,11 +33,12 @@ public class RecipeEditor : MonoBehaviour
 
 	private void Update()
 	{
-		if (player != null && Keyboard.current.eKey.wasPressedThisFrame)
+		if (!editMode && player != null && Keyboard.current.eKey.wasPressedThisFrame)
 		{
 			player.SetMove(false);
 			interactText.text = "";
 			panel.SetActive(true);
+			editMode = true;
 
 			for (int i = 0; i < ingredientListContainer.childCount; i++)
 			{
