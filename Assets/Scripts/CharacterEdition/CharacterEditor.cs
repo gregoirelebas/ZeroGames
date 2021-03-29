@@ -1,6 +1,8 @@
 ﻿using Cinemachine;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +10,7 @@ using UnityEngine.UI;
 
 public class CharacterEditor : MonoBehaviour
 {
+	[System.Serializable]
 	private class CharacterConfig
 	{
 		public int index = 0;
@@ -37,21 +40,17 @@ public class CharacterEditor : MonoBehaviour
 	private CharacterConfig currentConfig = null;
 	private List<LoadSlot> loadSlots = new List<LoadSlot>();
 
+	private string directoryPath = "Character";
+	private string filePath = "characterConfiguration.json";
+
 	private void Awake()
 	{
 		for (int i = 0; i < slotGrid.transform.childCount; i++)
 		{
 			loadSlots.Add(slotGrid.transform.GetChild(i).GetComponent<LoadSlot>());
 		}
-	}
 
-	private void Start()
-	{
-		int lastIndex = PlayerPrefs.GetInt("LastCharacterIndex", -1);
-		if (lastIndex > -1)
-		{
-			LoadConfig(lastIndex);
-		}
+		LoadCharacterFile();
 	}
 
 	private void OnEnable()
@@ -76,10 +75,7 @@ public class CharacterEditor : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		if (currentConfig != null)
-		{
-			PlayerPrefs.SetInt("LastCharacterIndex", currentConfig.index);
-		}
+		WriteCharacterFile();
 	}
 
 	private void GetPlayer(Player player)
@@ -126,6 +122,35 @@ public class CharacterEditor : MonoBehaviour
 			interactText.text = "Edit character";
 
 			editPanel.SetActive(false);
+		}
+	}
+
+	private void WriteCharacterFile()
+	{
+		string path = Path.Combine(Application.persistentDataPath, directoryPath);
+		if (!Directory.Exists(path))
+		{
+			Directory.CreateDirectory(path);
+		}
+
+		path = Path.Combine(path, filePath);
+
+
+		string json = JsonConvert.SerializeObject(allConfigs);
+		File.WriteAllText(path, json);
+	}
+
+	private void LoadCharacterFile()
+	{
+		string path = Path.Combine(Application.persistentDataPath, directoryPath);
+		if (Directory.Exists(path))
+		{
+			path = Path.Combine(path, filePath);
+			if (File.Exists(path))
+			{
+				string json = File.ReadAllText(path);				
+				allConfigs = JsonConvert.DeserializeObject<List<CharacterConfig>>(json);
+			}
 		}
 	}
 
