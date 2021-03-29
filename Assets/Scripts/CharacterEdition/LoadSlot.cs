@@ -24,6 +24,6 @@ public class LoadSlot : MonoBehaviour
 	{
 		slotBtn.onClick.AddListener(() => editor.LoadConfig(index));
 
-		slotText.text = index.ToString();
+		slotText.text = (index + 1).ToString();
 	}
 }

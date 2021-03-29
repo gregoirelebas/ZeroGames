@@ -2872,7 +2872,7 @@ MonoBehaviour:
   - {fileID: 553159205}
   - {fileID: 1910747077}
   - {fileID: 592586475}
-  loadPanel: {fileID: 38324096}
+  slotGrid: {fileID: 38324098}
 --- !u!224 &775767624 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7468781144894747324, guid: f54d35f1262133349acd1714a1ab50ed,

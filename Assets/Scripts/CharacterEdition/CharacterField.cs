@@ -20,10 +20,14 @@ public class CharacterField : MonoBehaviour
 	private MeshFilter meshFilter = null;
 	private MeshRenderer meshRenderer = null;
 	private int valueIndex = 0;
+	private int maxValue = 0;
 
 	private void Awake()
 	{
 		fieldText.text = part.ToString();
+
+		//If we are not setting mesh, we are setting material
+		maxValue = setMesh ? meshes.Count : materials.Count;
 	}
 
 	private void SetValueToTarget()
@@ -65,9 +69,8 @@ public class CharacterField : MonoBehaviour
 		{
 			valueIndex--;
 			if (valueIndex < 0)
-			{
-				//If we are not setting mesh, we are setting material
-				valueIndex = (setMesh ? meshes.Count : materials.Count) - 1;
+			{				
+				valueIndex = maxValue - 1;
 			}
 
 			SetValueToTarget();
@@ -80,12 +83,20 @@ public class CharacterField : MonoBehaviour
 		{
 			valueIndex++;
 
-			//If we are not setting mesh, we are setting material
-			if (valueIndex >= (setMesh ? meshes.Count : materials.Count))
+			if (valueIndex >= maxValue)
 			{
 				valueIndex = 0;
 			}
 
+			SetValueToTarget();
+		}
+	}
+
+	public void SetIndexValue(int value)
+	{
+		if (value > 0 && value < maxValue)
+		{
+			valueIndex = value;
 			SetValueToTarget();
 		}
 	}

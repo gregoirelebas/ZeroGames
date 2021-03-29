@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class CharacterEditor : MonoBehaviour
 {
@@ -27,13 +28,22 @@ public class CharacterEditor : MonoBehaviour
 	[Header("Internal references")]
 	[SerializeField] private GameObject editPanel = null;
 	[SerializeField] private List<CharacterField> fields = null;
-	[SerializeField] private GameObject loadPanel = null;
+	[SerializeField] private GridLayoutGroup slotGrid = null;
 
 	private Player player = null;
 	private bool editMode = false;
 
 	private CharacterConfig currentConfig = null;
 	private int lastIndex = 0;
+	private List<LoadSlot> loadSlots = new List<LoadSlot>();
+
+	private void Awake()
+	{
+		for (int i = 0; i < slotGrid.transform.childCount; i++)
+		{
+			loadSlots.Add(slotGrid.transform.GetChild(i).GetComponent<LoadSlot>());
+		}
+	}
 
 	private void OnEnable()
 	{
@@ -51,8 +61,8 @@ public class CharacterEditor : MonoBehaviour
 
 	private void OnDisable()
 	{
-		trigger.OnPlayerEnter += GetPlayer;
-		trigger.OnPlayerExit += RemovePlayer;
+		trigger.OnPlayerEnter -= GetPlayer;
+		trigger.OnPlayerExit -= RemovePlayer;
 	}
 
 	private void GetPlayer(Player player)
@@ -104,12 +114,32 @@ public class CharacterEditor : MonoBehaviour
 
 	public void ShowHideLoadPanel()
 	{
-		loadPanel.SetActive(!loadPanel.activeSelf);
+		slotGrid.gameObject.SetActive(!slotGrid.gameObject.activeSelf);
+		if (slotGrid.gameObject.activeSelf)
+		{
+			for (int i = 0; i < loadSlots.Count; i++)
+			{
+				loadSlots[i].gameObject.SetActive(false);
+			}
+
+			for (int i = 0; i < 2; i++)
+			{
+				loadSlots[i].gameObject.SetActive(true);
+				loadSlots[i].SetSlotIndex(this, i);
+			}
+		}
 	}
 
 	public void LoadConfig(int index)
 	{
 		Debug.Log("Loading config : " + index);
+
+		currentConfig = new CharacterConfig(index);
+
+		for (int i = 0; i < fields.Count; i++)
+		{
+			fields[i].SetIndexValue(index + 1);
+		}
 	}
 
 	public void SaveConfig(bool saveAsNew)
