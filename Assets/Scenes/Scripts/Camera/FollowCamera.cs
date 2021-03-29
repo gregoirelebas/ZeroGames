@@ -8,7 +8,7 @@ public class FollowCamera : MonoBehaviour
 
 	private Vector3 offset = Vector3.zero;
 
-	private void Awake()
+	private void Start()
 	{
 		offset = target.position - transform.position;
 	}
