@@ -49,6 +49,8 @@ public class RecipeEditor : MonoBehaviour
 			{
 				Destroy(recipeGridContainer.GetChild(i).gameObject);
 			}
+
+			AddRecipe(); //DEBUG
 		}
 	}
 
@@ -88,5 +90,13 @@ public class RecipeEditor : MonoBehaviour
 	public void RemoveIngredient(IngredientSlot toRemove)
 	{
 		ingredientSlots.Remove(toRemove);
+	}
+
+	public void AddRecipe()
+	{
+		GameObject go = Instantiate(recipeSlotPrefab, recipeGridContainer);
+		RecipeSlot newSlot = go.GetComponent<RecipeSlot>();
+
+		newSlot.SetRecipe("Vegetable-Pasta Oven Omelet", "http://img.recipepuppy.com/560556.jpg");
 	}
 }

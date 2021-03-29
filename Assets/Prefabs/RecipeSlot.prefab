@@ -214,6 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5659024182187393247}
   - component: {fileID: 5659024182187393241}
+  - component: {fileID: 8409801427209127284}
   m_Layer: 5
   m_Name: RecipeSlot
   m_TagString: Untagged
@@ -250,3 +251,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5659024182187393244}
   m_CullTransparentMesh: 0
+--- !u!114 &8409801427209127284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5659024182187393244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cafa798f2fa04b5438efe0747da69e28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 5659024181252266510}
+  image: {fileID: 3797505670140678846}
