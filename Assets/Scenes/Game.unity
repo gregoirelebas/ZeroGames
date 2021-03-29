@@ -2225,8 +2225,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 760884399}
-  - {fileID: 1530676429}
   - {fileID: 462579733}
+  - {fileID: 1530676429}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2390,7 +2390,7 @@ RectTransform:
   m_Children:
   - {fileID: 1194225735}
   m_Father: {fileID: 432743118}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2409,6 +2409,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 079413d2fba4c60498fd78b2148fe778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trigger: {fileID: 467996438}
+  interactText: {fileID: 1530676430}
+  panel: {fileID: 1194225734}
 --- !u!1 &467996433
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,6 +2424,7 @@ GameObject:
   - component: {fileID: 467996436}
   - component: {fileID: 467996435}
   - component: {fileID: 467996434}
+  - component: {fileID: 467996438}
   m_Layer: 2
   m_Name: RecipeTriggerArea
   m_TagString: Untagged
@@ -2502,6 +2506,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &467996438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467996433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941643ba75daf6945b9bcbc4b1351c7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &496578164
 GameObject:
   m_ObjectHideFlags: 0
@@ -7398,7 +7414,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 432743118}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
