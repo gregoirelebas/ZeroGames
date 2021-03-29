@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 
 	private void Update()
 	{
-		if (Mouse.current.leftButton.isPressed)
+		if (!agent.isStopped && Mouse.current.leftButton.isPressed)
 		{
 			Vector2 mousePosition = Mouse.current.position.ReadValue();
 
@@ -37,5 +37,13 @@ public class Player : MonoBehaviour
 			Gizmos.color = Color.blue;
 			Gizmos.DrawSphere(agent.destination, 0.5f);
 		}
+	}
+
+	/// <summary>
+	/// Allow or not the player to move with mouse click.
+	/// </summary>
+	public void SetMove(bool canMove)
+	{
+		agent.isStopped = !canMove;
 	}
 }
