@@ -9,6 +9,7 @@ public class RecipeSlot : MonoBehaviour
 {
 	[SerializeField] private TextMeshProUGUI nameText = null;
 	[SerializeField] private RawImage image = null;
+	[SerializeField] private Image placeholder = null;
 
 	private IEnumerator LoadImageFromURL(string url)
 	{
@@ -30,6 +31,17 @@ public class RecipeSlot : MonoBehaviour
 	public void SetRecipe(string name, string imageURL)
 	{
 		nameText.text = name;
-		StartCoroutine(LoadImageFromURL(imageURL));
+		if (imageURL != null && imageURL != "")
+		{
+			image.gameObject.SetActive(true);
+			placeholder.gameObject.SetActive(false);
+
+			StartCoroutine(LoadImageFromURL(imageURL));
+		}
+		else
+		{
+			image.gameObject.SetActive(false);
+			placeholder.gameObject.SetActive(true);
+		}
 	}
 }

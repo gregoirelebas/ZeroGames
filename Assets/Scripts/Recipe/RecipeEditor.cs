@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class RecipeEditor : MonoBehaviour
 	{
 		public string title = "";
 		public string href = "";
-		public List<string> ingredients = null;
+		public string ingredients = "";
 		public string thumbnail = "";
 	}
 
@@ -57,17 +58,8 @@ public class RecipeEditor : MonoBehaviour
 			panel.SetActive(true);
 			editMode = true;
 
-			for (int i = 0; i < ingredientListContainer.childCount; i++)
-			{
-				Destroy(ingredientListContainer.GetChild(i).gameObject);
-			}
-
-			for (int i = 0; i < recipeGridContainer.childCount; i++)
-			{
-				Destroy(recipeGridContainer.GetChild(i).gameObject);
-			}
-
-			AddRecipe(); //DEBUG
+			ClearIngredientDisplay();
+			ClearRecipeDisplay();
 		}
 	}
 
@@ -90,6 +82,22 @@ public class RecipeEditor : MonoBehaviour
 		interactText.text = "";
 	}
 
+	private void ClearIngredientDisplay()
+	{
+		for (int i = 0; i < ingredientListContainer.childCount; i++)
+		{
+			Destroy(ingredientListContainer.GetChild(i).gameObject);
+		}
+	}
+
+	private void ClearRecipeDisplay()
+	{
+		for (int i = 0; i < recipeGridContainer.childCount; i++)
+		{
+			Destroy(recipeGridContainer.GetChild(i).gameObject);
+		}
+	}
+
 	private IEnumerator SearchForRecipes()
 	{
 		string url = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
@@ -105,7 +113,13 @@ public class RecipeEditor : MonoBehaviour
 			else
 			{
 				string json = request.downloadHandler.text;
-				Debug.Log(json);
+
+				RecipeSearchResult search = JsonConvert.DeserializeObject<RecipeSearchResult>(json);
+				for (int i = 0; i < search.results.Count; i++)
+				{
+					Recipe recipe = search.results[i];
+					AddRecipe(recipe.title, recipe.thumbnail);
+				}
 			}
 		}
 	}
@@ -129,12 +143,12 @@ public class RecipeEditor : MonoBehaviour
 		ingredientSlots.Remove(toRemove);
 	}
 
-	public void AddRecipe()
+	public void AddRecipe(string title, string url)
 	{
 		GameObject go = Instantiate(recipeSlotPrefab, recipeGridContainer);
 		RecipeSlot newSlot = go.GetComponent<RecipeSlot>();
 
-		newSlot.SetRecipe("Vegetable-Pasta Oven Omelet", "http://img.recipepuppy.com/560556.jpg");
+		newSlot.SetRecipe(title, url);
 	}
 
 	public void Search()
