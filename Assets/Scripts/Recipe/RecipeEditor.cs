@@ -37,6 +37,7 @@ public class RecipeEditor : MonoBehaviour
 	[Header("Recipes")]
 	[SerializeField] private GameObject recipeSlotPrefab = null;
 	[SerializeField] private Transform recipeGridContainer = null;
+	[SerializeField] private TMP_InputField recipeField = null;
 
 	private Player player = null;
 	private bool editMode = false;
@@ -98,10 +99,8 @@ public class RecipeEditor : MonoBehaviour
 		}
 	}
 
-	private IEnumerator SearchForRecipes()
+	private IEnumerator SearchForRecipes(string url)
 	{
-		string url = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
-
 		using (UnityWebRequest request = UnityWebRequest.Get(url))
 		{
 			yield return request.SendWebRequest();
@@ -153,6 +152,38 @@ public class RecipeEditor : MonoBehaviour
 
 	public void Search()
 	{
-		StartCoroutine(SearchForRecipes());
+		ClearRecipeDisplay();
+
+		string search = "http://www.recipepuppy.com/api/";
+		bool hasIngredient = false;
+
+		for (int i = 0; i < ingredientSlots.Count; i++)
+		{
+			//First add "?i="
+			if (i == 0)
+			{
+				search += "?i=";
+				hasIngredient = true;
+			}
+			//Then add "," except for the last one
+			else if (i > 0 && i < ingredientSlots.Count - 1)
+			{
+				search += ",";
+			}
+
+			search += ingredientSlots[i].GetName();
+		}
+
+		if (recipeField.text != "")
+		{
+			if (hasIngredient)
+			{
+				search += "&";
+			}
+
+			search += "q=" + recipeField.text;
+		}
+
+		StartCoroutine(SearchForRecipes(search));
 	}
 }

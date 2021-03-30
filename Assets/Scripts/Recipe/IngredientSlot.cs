@@ -18,4 +18,9 @@ public class IngredientSlot : MonoBehaviour
 			Destroy(gameObject);
 		});
 	}
+
+	public string GetName()
+	{
+		return nameText.text;
+	}
 }

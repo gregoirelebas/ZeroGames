@@ -2684,6 +2684,7 @@ MonoBehaviour:
   recipeSlotPrefab: {fileID: 5659024182187393244, guid: c8ab18fbc73010e449b8e1bea32cb891,
     type: 3}
   recipeGridContainer: {fileID: 1472218599}
+  recipeField: {fileID: 337504659}
 --- !u!1 &467996433
 GameObject:
   m_ObjectHideFlags: 0
