@@ -37,6 +37,7 @@ public class CharacterEditor : MonoBehaviour
 
 	private Player player = null;
 	private bool editMode = false;
+	private string interactionText = "E : Edit character";
 
 	private List<CharacterConfig> allConfigs = new List<CharacterConfig>();
 	private CharacterConfig currentConfig = null;
@@ -87,7 +88,7 @@ public class CharacterEditor : MonoBehaviour
 	private void GetPlayer(Player player)
 	{
 		this.player = player;
-		interactText.text = "Edit character";
+		interactText.text = interactionText;
 
 		for (int i = 0; i < (int)PlayerParts.Count; i++)
 		{
@@ -134,7 +135,7 @@ public class CharacterEditor : MonoBehaviour
 			editMode = false;
 			player.SetMove(true);
 			vCamera.Priority = 10;
-			interactText.text = "Edit character";
+			interactText.text = interactionText;
 
 			editPanel.SetActive(false);
 		}
