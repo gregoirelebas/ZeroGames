@@ -54,10 +54,10 @@ public class RecipeEditor : MonoBehaviour
 	{
 		if (!editMode && player != null && Keyboard.current.eKey.wasPressedThisFrame)
 		{
+			editMode = true;
 			player.SetMove(false);
 			interactText.text = "";
 			panel.SetActive(true);
-			editMode = true;
 
 			ClearIngredientDisplay();
 			ClearRecipeDisplay();
@@ -120,6 +120,17 @@ public class RecipeEditor : MonoBehaviour
 					AddRecipe(recipe.title, recipe.thumbnail);
 				}
 			}
+		}
+	}
+
+	public void QuitEditor()
+	{
+		if (editMode)
+		{
+			editMode = false;
+			player.SetMove(true);
+			interactText.text = "Search recipes";
+			panel.SetActive(false);
 		}
 	}
 
