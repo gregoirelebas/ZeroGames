@@ -3,9 +3,26 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 
 public class RecipeEditor : MonoBehaviour
 {
+	private class Recipe
+	{
+		public string title = "";
+		public string href = "";
+		public List<string> ingredients = null;
+		public string thumbnail = "";
+	}
+
+	private class RecipeSearchResult
+	{
+		public string title = "";
+		public float version = 0.0f;
+		public string href = "";
+		public List<Recipe> results = null;
+	}
+
 	[Header("Interaction")]
 	[SerializeField] private PlayerAreaTrigger trigger = null;
 	[SerializeField] private TextMeshProUGUI interactText = null;
@@ -73,6 +90,26 @@ public class RecipeEditor : MonoBehaviour
 		interactText.text = "";
 	}
 
+	private IEnumerator SearchForRecipes()
+	{
+		string url = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
+
+		using (UnityWebRequest request = UnityWebRequest.Get(url))
+		{
+			yield return request.SendWebRequest();
+
+			if (request.isNetworkError || request.isHttpError)
+			{
+				Debug.LogError(request.error);
+			}
+			else
+			{
+				string json = request.downloadHandler.text;
+				Debug.Log(json);
+			}
+		}
+	}
+
 	public void AddIngredient()
 	{
 		if (ingredientField.text != "")
@@ -98,5 +135,10 @@ public class RecipeEditor : MonoBehaviour
 		RecipeSlot newSlot = go.GetComponent<RecipeSlot>();
 
 		newSlot.SetRecipe("Vegetable-Pasta Oven Omelet", "http://img.recipepuppy.com/560556.jpg");
+	}
+
+	public void Search()
+	{
+		StartCoroutine(SearchForRecipes());
 	}
 }
