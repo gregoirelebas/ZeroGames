@@ -41,6 +41,7 @@ public class RecipeEditor : MonoBehaviour
 
 	private Player player = null;
 	private bool editMode = false;
+	private string interactionText = "E : Search for recipes";
 
 	private List<IngredientSlot> ingredientSlots = new List<IngredientSlot>();
 
@@ -70,19 +71,69 @@ public class RecipeEditor : MonoBehaviour
 		trigger.OnPlayerExit -= HideInteractionText;
 	}
 
+	/// <summary>
+	/// Set the text to display on MainCanvas.
+	/// </summary>
 	private void SetInteractionText(Player player)
 	{
 		this.player = player;
-		interactText.text = "Search recipes";
+		interactText.text = interactionText;
 
 	}
 
+	/// <summary>
+	/// Erase the text on MainCanvas.
+	/// </summary>
 	private void HideInteractionText()
 	{
 		player = null;
 		interactText.text = "";
 	}
 
+	/// <summary>
+	/// Hide the editor panel and unlock the player.
+	/// </summary>
+	public void QuitEditor()
+	{
+		if (editMode)
+		{
+			editMode = false;
+			player.SetMove(true);
+			interactText.text = "Search recipes";
+			panel.SetActive(false);
+		}
+	}
+
+	#region Ingredients
+
+	/// <summary>
+	/// Create and add a new ingredient slot in the display.
+	/// </summary>
+	public void AddIngredient()
+	{
+		if (ingredientField.text != "")
+		{
+			GameObject go = Instantiate(ingredientSlotPrefab, ingredientListContainer);
+			IngredientSlot newSlot = go.GetComponent<IngredientSlot>();
+
+			newSlot.SetIngredient(this, ingredientField.text);
+			ingredientSlots.Add(newSlot);
+
+			ingredientField.text = "";
+		}
+	}
+
+	/// <summary>
+	/// Remove the ingredient from the ingredient list.
+	/// </summary>
+	public void RemoveIngredient(IngredientSlot toRemove)
+	{
+		ingredientSlots.Remove(toRemove);
+	}
+
+	/// <summary>
+	/// Get all slots on ingredient display and destroy them.
+	/// </summary>
 	private void ClearIngredientDisplay()
 	{
 		for (int i = 0; i < ingredientListContainer.childCount; i++)
@@ -91,6 +142,24 @@ public class RecipeEditor : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region Recipes
+
+	/// <summary>
+	/// Create and add a new recipe in recipe display.
+	/// </summary>
+	public void AddRecipe(string title, string url)
+	{
+		GameObject go = Instantiate(recipeSlotPrefab, recipeGridContainer);
+		RecipeSlot newSlot = go.GetComponent<RecipeSlot>();
+
+		newSlot.SetRecipe(title, url);
+	}
+
+	/// <summary>
+	/// Get all slots on recipe display and destroy them.
+	/// </summary>
 	private void ClearRecipeDisplay()
 	{
 		for (int i = 0; i < recipeGridContainer.childCount; i++)
@@ -99,6 +168,9 @@ public class RecipeEditor : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Send a request at url, deserialize JSON found and display corresponding recipes.
+	/// </summary>
 	private IEnumerator SearchForRecipes(string url)
 	{
 		using (UnityWebRequest request = UnityWebRequest.Get(url))
@@ -123,44 +195,9 @@ public class RecipeEditor : MonoBehaviour
 		}
 	}
 
-	public void QuitEditor()
-	{
-		if (editMode)
-		{
-			editMode = false;
-			player.SetMove(true);
-			interactText.text = "Search recipes";
-			panel.SetActive(false);
-		}
-	}
-
-	public void AddIngredient()
-	{
-		if (ingredientField.text != "")
-		{
-			GameObject go = Instantiate(ingredientSlotPrefab, ingredientListContainer);
-			IngredientSlot newSlot = go.GetComponent<IngredientSlot>();
-
-			newSlot.SetIngredient(this, ingredientField.text);
-			ingredientSlots.Add(newSlot);
-
-			ingredientField.text = "";
-		}
-	}
-
-	public void RemoveIngredient(IngredientSlot toRemove)
-	{
-		ingredientSlots.Remove(toRemove);
-	}
-
-	public void AddRecipe(string title, string url)
-	{
-		GameObject go = Instantiate(recipeSlotPrefab, recipeGridContainer);
-		RecipeSlot newSlot = go.GetComponent<RecipeSlot>();
-
-		newSlot.SetRecipe(title, url);
-	}
-
+	/// <summary>
+	/// Create an url based on ingredient list and query field, then start the request.
+	/// </summary>
 	public void Search()
 	{
 		ClearRecipeDisplay();
@@ -197,4 +234,6 @@ public class RecipeEditor : MonoBehaviour
 
 		StartCoroutine(SearchForRecipes(search));
 	}
+
+	#endregion
 }

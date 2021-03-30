@@ -11,6 +11,9 @@ public class RecipeSlot : MonoBehaviour
 	[SerializeField] private RawImage image = null;
 	[SerializeField] private Image placeholder = null;
 
+	/// <summary>
+	/// Send a request to download a texture at url and display it on image.
+	/// </summary>
 	private IEnumerator LoadImageFromURL(string url)
 	{
 		using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
@@ -28,6 +31,9 @@ public class RecipeSlot : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Set the recipe name and image. If url is empty, display placeholder.
+	/// </summary>
 	public void SetRecipe(string name, string imageURL)
 	{
 		nameText.text = name;
