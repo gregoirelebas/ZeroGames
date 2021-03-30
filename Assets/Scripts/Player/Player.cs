@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject leftArmMesh = null;
 	[SerializeField] private GameObject rightArmMesh = null;
 
+	[Header("NavMesh")]
+	[SerializeField] private LayerMask navMeshMask = 1;
+
 	private NavMeshAgent agent = null;
 	private Camera mainCamera = null;
 
@@ -36,20 +39,10 @@ public class Player : MonoBehaviour
 			Vector2 mousePosition = Mouse.current.position.ReadValue();
 
 			Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, navMeshMask))
 			{
 				agent.SetDestination(hit.point);
 			}			
-		}
-	}
-
-	//DEBUG
-	private void OnDrawGizmos()
-	{
-		if (agent != null)
-		{
-			Gizmos.color = Color.blue;
-			Gizmos.DrawSphere(agent.destination, 0.5f);
 		}
 	}
 
